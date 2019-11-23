@@ -18,9 +18,6 @@ namespace WaniKaniDiscordProgressBot
     {
         static async Task Main(string[] args)
         {
-            await new WanikaniStatsJob().Execute(null);
-            await Task.Delay(-1);
-
             var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
 
             await scheduler.Start();
