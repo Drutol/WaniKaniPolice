@@ -57,6 +57,11 @@ namespace WaniKaniDiscordProgressBot
                     TokenType.Bot,
                     token: secrets.BotToken);
 
+                _discordClient.Log += async message =>
+                {
+                    Console.WriteLine(message);
+                };
+
                 _discordClient.Ready += DiscordClientOnReady;
                 await _discordClient.StartAsync();
             }
@@ -72,6 +77,9 @@ namespace WaniKaniDiscordProgressBot
             {
                 var server = _discordClient.GetGuild(343060137164144642);
                 var channel = (IMessageChannel)server.GetChannel(505414979458170903);
+
+                await server.DownloadUsersAsync();
+
                 foreach (var user in JsonConvert.DeserializeObject<List<User>>(File.ReadAllText("users.json")))
                 {
                     try
@@ -119,6 +127,7 @@ namespace WaniKaniDiscordProgressBot
             var assignments = await Get<AssignmentsResponse>("/assignments");
             var summary = await Get<SummaryResponse>("/summary");
             var progressions = await Get<LevelProgressionsResponse>("/level_progressions", false);
+
             var discordUser = _socketGuild.GetUser(_user.UserId);
 
             builder.WithAuthor(authorBuilder => authorBuilder
@@ -132,7 +141,7 @@ namespace WaniKaniDiscordProgressBot
 
             var daysOnLevel = (DateTime.UtcNow.Date - progressions.Data.Last().Data.UnlockedAt)?.Days ?? 0;
 
-            builder.WithDescription($"Level: **{user.Data.Level}/{user.Data.MaxLevelGrantedBySubscription}**\n" +
+            builder.WithDescription($"Level: **{user.Data.Level}**\n" +
                                     $"Available Lessons: **{summary.Data.Lessons[0].SubjectIds.Count}**\n" +
                                     $"Available Reviews: **{reviewsCount}**\n" +
                                     $"Serving Crabigator for: **{(DateTime.UtcNow.Date - user.Data.StartedAt).Days} days**");
