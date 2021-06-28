@@ -28,6 +28,7 @@ namespace WaniKaniDiscordProgressBot
 
             var trigger = TriggerBuilder
                 .Create()
+                //.StartNow()
                 .StartAt(DateTime.UtcNow.Date.AddDays(1))
                 .WithSimpleSchedule(builder =>
                     builder
@@ -157,16 +158,20 @@ namespace WaniKaniDiscordProgressBot
                 builder.WithColor(Color.DarkRed);
             }
 
+            var yesterday = DateTime.UtcNow.Date.AddDays(-1);
+
             builder.WithFooter(footerBuilder =>
                 footerBuilder.WithText($"{DateTime.UtcNow.Date:M} - {DateTime.UtcNow.Date.AddDays(1):M}"));
 
             builder.AddField(fieldBuilder => fieldBuilder
                 .WithName("Completed Reviews")
-                .WithValue(reviews.Data.Count));
+                .WithValue(reviews.Data.Count(review => review.Data.CreatedAt.HasValue && 
+                                                        review.Data.CreatedAt.Value.Date == yesterday)));
 
             builder.AddField(fieldBuilder => fieldBuilder
                 .WithName("Completed Lessons")
-                .WithValue(assignments.Data.Count(assignment => assignment.Data.SrsStage == 1)));
+                .WithValue(assignments.Data.Count(assignment => assignment.Data.StartedAt.HasValue && 
+                                                                assignment.Data.StartedAt.Value.Date == yesterday)));
 
             //builder.AddField(fieldBuilder => fieldBuilder
             //    .WithName("New Lessons")
