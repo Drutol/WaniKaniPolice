@@ -90,7 +90,7 @@ namespace WaniKaniDiscordProgressBot
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine($"{DateTime.UtcNow} Failed for {user.UserId}.");
+                        Console.WriteLine($"{DateTime.UtcNow} Failed for {user.UserId}. {e}");
                     }
                 }
 

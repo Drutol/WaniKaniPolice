@@ -40,7 +40,7 @@ namespace WaniKaniDiscordProgressBot.Models
         [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
         public class Review
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Url { get; set; }
             public DateTime? DataUpdatedAt { get; set; }
             public ReviewData Data { get; set; }

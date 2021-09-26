@@ -44,7 +44,7 @@ namespace WaniKaniDiscordProgressBot.Models
         [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
         public class Assignment
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Object { get; set; }
             public string Url { get; set; }
             public DateTime? DataUpdatedAt { get; set; }
