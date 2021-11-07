@@ -154,7 +154,7 @@ namespace WaniKaniDiscordProgressBot
             }
             else
             {
-                builder.WithThumbnailUrl("https://mylovelyvps.xyz/wkpolice/cross.png");
+                builder.WithThumbnailUrl(_user.CrossOverride ?? "https://mylovelyvps.xyz/wkpolice/cross.png");
                 builder.WithColor(Color.DarkRed);
             }
 

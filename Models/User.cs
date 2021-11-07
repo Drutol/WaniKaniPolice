@@ -9,5 +9,6 @@ namespace WaniKaniDiscordProgressBot.Models
         public string WkToken { get; set; }
         public ulong UserId { get; set; }
         public string CheckOverride { get; set; }
+        public string CrossOverride { get; set; }
     }
 }
