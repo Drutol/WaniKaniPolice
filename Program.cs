@@ -48,6 +48,7 @@ namespace WaniKaniDiscordProgressBot
 
         public async Task Execute(IJobExecutionContext context)
         {
+            await Task.Delay(TimeSpan.FromMinutes(10));
             Console.WriteLine($"{DateTime.UtcNow} Executing...");
             try
             {
@@ -136,7 +137,7 @@ namespace WaniKaniDiscordProgressBot
                 .WithIconUrl(discordUser.GetAvatarUrl()));
 
             var reviewsCount = summary.Data.Reviews
-                .Where(review => DateTime.UtcNow > review.AvailableAt)
+                .Where(review => review.AvailableAt != null && DateTime.UtcNow > review.AvailableAt)
                 .SelectMany(review => review.SubjectIds)
                 .Count();
 
