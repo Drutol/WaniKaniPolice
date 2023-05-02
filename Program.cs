@@ -125,7 +125,7 @@ namespace WaniKaniDiscordProgressBot
         {
             var builder = new EmbedBuilder();
             var user = await Get<UserResponse>("/user");
-            var reviews = await Get<ReviewsResponse>("/reviews");
+            var reviews = await Get<ReviewsStatisticsResponse>("/review_statistics");
             var assignments = await Get<AssignmentsResponse>("/assignments");
             var summary = await Get<SummaryResponse>("/summary");
             var progressions = await Get<LevelProgressionsResponse>("/level_progressions", false);
@@ -148,7 +148,9 @@ namespace WaniKaniDiscordProgressBot
                                     $"Available Reviews: **{reviewsCount}**\n" +
                                     $"Serving Crabigator for: **{(DateTime.UtcNow.Date - user.Data.StartedAt).Days} days**");
 
-            if (reviews.Data.Count > 0)
+            var yesterday = DateTime.UtcNow.Date.AddDays(-1);
+
+            if (reviews.Data.Count(s => s.DataUpdatedAt.HasValue && s.DataUpdatedAt.Value.Date == yesterday) > 0)
             {
                 builder.WithThumbnailUrl(_user.CheckOverride ?? "https://mylovelyvps.xyz/wkpolice/tick.png");
                 builder.WithColor(Color.Green);
@@ -159,15 +161,13 @@ namespace WaniKaniDiscordProgressBot
                 builder.WithColor(Color.DarkRed);
             }
 
-            var yesterday = DateTime.UtcNow.Date.AddDays(-1);
-
             builder.WithFooter(footerBuilder =>
                 footerBuilder.WithText($"{DateTime.UtcNow.Date:M} - {DateTime.UtcNow.Date.AddDays(1):M}"));
 
             builder.AddField(fieldBuilder => fieldBuilder
                 .WithName("Completed Reviews")
-                .WithValue(reviews.Data.Count(review => review.Data.CreatedAt.HasValue && 
-                                                        review.Data.CreatedAt.Value.Date == yesterday)));
+                .WithValue(reviews.Data.Count(review => review.DataUpdatedAt.HasValue && 
+                                                        review.DataUpdatedAt.Value.Date == yesterday)));
 
             builder.AddField(fieldBuilder => fieldBuilder
                 .WithName("Completed Lessons")
