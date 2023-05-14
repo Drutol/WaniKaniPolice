@@ -15,7 +15,7 @@ public class ReviewsStatisticsResponse
     public string Url { get; set; }
     public Page Pages { get; set; }
     public int TotalCount { get; set; }
-    public DateTime DataUpdatedAt { get; set; }
+    public DateTime? DataUpdatedAt { get; set; }
     public List<Statistic> Data { get; set; }
 
     [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
